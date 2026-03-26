@@ -1,0 +1,2 @@
+# Node package init
+

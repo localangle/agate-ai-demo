@@ -1,0 +1,81 @@
+# Default .dockerignore (fallback for builds that don't use service-specific ignore files)
+# Service-specific ignore files:
+#   - apps/api/Dockerfile.dockerignore (excludes geocoding DB)
+#   - apps/worker/Dockerfile.dockerignore (includes geocoding DB)
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+.pytest_cache/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.coverage
+htmlcov/
+.tox/
+.venv/
+venv/
+ENV/
+env/
+
+# Node.js / UI
+apps/ui/node_modules/
+apps/ui/dist/
+apps/ui/.vite/
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Documentation
+*.md
+LICENSE
+SETUP.md
+README.md
+todo.txt
+
+# Infrastructure (not needed in containers)
+infra/
+copilot/
+scripts/
+terraform/
+*.tfstate
+*.tfstate.backup
+.terraform/
+
+# Large data files (geocoding databases)
+packages/utils/src/agate_utils/geocoding/data/
+*.db
+*.db.bz2
+
+# Environment files
+.env
+.env.*
+*.env
+!*.env.example
+
+# Test files
+tests/
+test_*.py
+*_test.py
+

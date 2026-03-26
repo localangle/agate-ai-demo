@@ -1,0 +1,194 @@
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+
+interface LLMEnrichPanelProps {
+  node: any
+  onChange?: (text: string) => void
+  onRun?: () => void
+  running?: boolean
+  currentRun?: any
+  editMode?: boolean
+  setNodes?: (nodes: any) => void
+}
+
+export default function LLMEnrichPanel({
+  node,
+  onChange,
+  onRun,
+  running,
+  currentRun,
+  editMode,
+  setNodes
+}: LLMEnrichPanelProps) {
+  // Get latest run data - only show if we have specific node output
+  const nodeOutput = currentRun?.node_outputs?.[node.id]
+  const latestData = nodeOutput || null
+  const outputName = node.data.output_name || nodeMetadata?.defaultParams?.output_name || 'meta_enriched_data'
+
+  return (
+    <>
+      <div className="space-y-3">
+        <div>
+          <Label className="text-sm font-medium">Description</Label>
+          <p className="text-sm text-muted-foreground mt-1">
+            This node uses an LLM to process JSON data according to your custom prompt and returns structured JSON data.
+            Use JSON path placeholders in your prompt to extract specific fields:
+          </p>
+          <ul className="text-xs text-muted-foreground mt-2 space-y-1 list-disc list-inside">
+            <li><code className="bg-muted px-1 rounded">{'{text}'}</code> - extracts the text field</li>
+            <li><code className="bg-muted px-1 rounded">{'{url}'}</code> - extracts the url field</li>
+            <li><code className="bg-muted px-1 rounded">{'{results.images}'}</code> - extracts nested results.images object/array</li>
+            <li><code className="bg-muted px-1 rounded">{'{results.caption}'}</code> - extracts only caption field from array elements</li>
+            <li><code className="bg-muted px-1 rounded">{'{results.caption, id}'}</code> - extracts multiple fields from array elements</li>
+            <li><code className="bg-muted px-1 rounded">{'{raw}'}</code> - passes entire input JSON</li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="pt-4 border-t">
+        <div>
+          <Label className="text-sm font-medium">Parameters</Label>
+        </div>
+        
+        <div className="space-y-2 text-sm mt-2">
+          <div className="space-y-1">
+            <Label className="text-xs text-muted-foreground">Model</Label>
+            {editMode && setNodes ? (
+              <Select
+                value={node.data.model || 'gpt-5.4-mini'}
+                onValueChange={(value) => {
+                  setNodes((nds: any[]) =>
+                    nds.map((n: any) =>
+                      n.id === node.id
+                        ? { ...n, data: { ...n.data, model: value } }
+                        : n
+                    )
+                  )
+                }}
+              >
+                <SelectTrigger className="h-8 text-xs">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {nodeMetadata.availableModels?.map((model) => (
+                    <SelectItem key={model.value} value={model.value}>
+                      {model.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            ) : (
+              <div className="flex justify-between items-center p-2 bg-muted rounded">
+                <span className="text-muted-foreground">Model</span>
+                <span className="font-medium text-xs">{node.data.model || 'gpt-5.4-mini'}</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="pt-2">
+          <Label className="text-sm font-medium">Prompt</Label>
+          {editMode && setNodes ? (
+            <Textarea
+              value={node.data.prompt || ''}
+              onChange={(e) => {
+                setNodes((nds: any[]) =>
+                  nds.map((n: any) =>
+                    n.id === node.id
+                      ? { ...n, data: { ...n.data, prompt: e.target.value } }
+                      : n
+                  )
+                )
+              }}
+              placeholder="Enter your prompt here. Use JSON path placeholders like {text}, {url}, {results.images}, {raw}, etc."
+              className="mt-2 min-h-[80px] text-xs font-mono"
+            />
+          ) : (
+            <div className="mt-2 p-3 bg-muted rounded-lg">
+              <p className="text-xs text-muted-foreground whitespace-pre-wrap">
+                {node.data.prompt || 'No prompt set'}
+              </p>
+            </div>
+          )}
+        </div>
+
+        <div className="pt-2">
+          <Label className="text-sm font-medium">Output Format</Label>
+          {editMode && setNodes ? (
+            <Textarea
+              value={node.data.json_format || ''}
+              onChange={(e) => {
+                setNodes((nds: any[]) =>
+                  nds.map((n: any) =>
+                    n.id === node.id
+                      ? { ...n, data: { ...n.data, json_format: e.target.value } }
+                      : n
+                  )
+                )
+              }}
+              placeholder='{"key": "value", "example": "format"}'
+              className="mt-2 min-h-[60px] text-xs font-mono"
+            />
+          ) : (
+            <div className="mt-2 p-3 bg-muted rounded-lg">
+              <p className="text-xs text-muted-foreground font-mono">
+                {node.data.json_format || '{}'}
+              </p>
+            </div>
+          )}
+          <p className="text-xs text-muted-foreground mt-1">
+            Specify the format of the output as JSON
+          </p>
+        </div>
+
+        <div className="pt-2">
+          <Label className="text-sm font-medium">Output Field Name</Label>
+          {editMode && setNodes ? (
+            <input
+              type="text"
+              value={outputName}
+              onChange={(e) => {
+                setNodes((nds: any[]) =>
+                  nds.map((n: any) =>
+                    n.id === node.id
+                      ? { ...n, data: { ...n.data, output_name: e.target.value } }
+                      : n
+                  )
+                )
+              }}
+              placeholder="meta_enriched_data"
+              className="mt-2 w-full px-3 py-2 text-xs border border-input bg-background rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            />
+          ) : (
+            <div className="mt-2 p-2 bg-muted rounded">
+              <span className="text-xs font-mono">{outputName}</span>
+            </div>
+          )}
+          <p className="text-xs text-muted-foreground mt-1">
+            Prefixing your field name with <code className="bg-muted px-1 rounded">meta_</code> is required for the output to be viewable as metadata in the Agate dashboard.
+          </p>
+        </div>
+      </div>
+
+      {latestData && latestData[outputName] && (
+        <div className="pt-4 border-t">
+          <Label className="text-sm font-medium">Latest Run</Label>
+          <div className="mt-2 space-y-2">
+            <div className="text-xs text-muted-foreground">
+              <div>Enriched data generated</div>
+            </div>
+            
+            <div>
+              <Label className="text-xs font-medium">Sample Output:</Label>
+              <div className="text-xs font-mono p-2 bg-muted rounded mt-1 max-h-32 overflow-y-auto">
+                {JSON.stringify(latestData[outputName], null, 2).substring(0, 200)}
+                {JSON.stringify(latestData[outputName], null, 2).length > 200 ? '...' : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  )
+}

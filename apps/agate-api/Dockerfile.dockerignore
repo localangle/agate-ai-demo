@@ -1,0 +1,40 @@
+# API-specific Docker ignore - excludes geocoding database
+
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+
+# Node.js / UI
+apps/agate-ui/node_modules/
+apps/agate-ui/dist/
+node_modules/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Documentation
+*.md
+LICENSE
+todo.txt
+
+# Infrastructure
+infra/
+copilot/
+scripts/
+terraform/
+
+# Environment files
+.env
+.env.*
+

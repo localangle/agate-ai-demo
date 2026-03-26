@@ -1,0 +1,36 @@
+{
+  "type": "PlaceFilter",
+  "label": "Place Filter",
+  "category": "filter",
+  "icon": "Filter",
+  "description": "Filter PlaceExtract locations based on relevance.",
+  "requiredUpstreamNodes": ["PlaceExtract"],
+  "dependencyHelperText": "Requires extracted places as input.",
+  "inputs": [
+    {
+      "id": "locations",
+      "label": "Locations",
+      "type": "array",
+      "required": true
+    }
+  ],
+  "outputs": [
+    {
+      "id": "locations",
+      "label": "Locations",
+      "type": "array"
+    }
+  ],
+  "defaultParams": {
+    "model": "gpt-5.4-mini",
+    "prompt_file": "prompts/filter.md",
+    "output_format_file": "prompts/_filter_output.md",
+    "prompt": "",
+    "json_format": "[{\"index\":0,\"relevant\":true,\"reason\":\"\"}]"
+  },
+  "availableModels": [
+    { "value": "gpt-5.4-mini", "label": "GPT-5.4 Mini" },
+    { "value": "gpt-5.4", "label": "GPT-5.4" },
+    { "value": "gpt-5.4-nano", "label": "GPT-5.4 Nano" }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "type": "Embed",
+  "label": "Embed Text",
+  "icon": "FileText",
+  "description": "Create text embeddings using OpenAI",
+  "category": "enrichment",
+  "color": "bg-orange-500",
+  "requiredUpstreamNodes": [],
+  "dependencyHelperText": "Requires text input or JSON with a \"text\" attribute.",
+  "inputs": [
+    {
+      "id": "text",
+      "label": "Text",
+      "type": "string",
+      "required": true
+    }
+  ],
+  "outputs": [
+    {
+      "id": "embedding",
+      "label": "Embedding",
+      "type": "array"
+    }
+  ],
+  "defaultParams": {
+    "model": "text-embedding-3-small",
+    "dimensions": 1536,
+    "output_name": "text_embedding"
+  }
+}

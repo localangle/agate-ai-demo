@@ -1,0 +1,48 @@
+{
+  "name": "People/Orgs/Works extraction",
+  "spec": {
+    "name": "people/orgs/works_extraction",
+    "nodes": [
+      {
+        "id": "node-0",
+        "type": "TextInput",
+        "params": {
+          "text": "Mayor Brandon Johnson vetoed an ordinance tied to tipped worker wages in Chicago. The City Council vote was short of an override threshold. Illinois Restaurant Association President Sam Toia said he is lobbying alderpersons before the next council meeting."
+        },
+        "position": { "x": -56.0, "y": 319.0 }
+      },
+      {
+        "id": "node-1",
+        "type": "PeopleExtract",
+        "params": { "model": "gpt-5.4-mini" },
+        "position": { "x": 331.2760676546462, "y": 136.5600795937013 }
+      },
+      {
+        "id": "node-2",
+        "type": "OrganizationsExtract",
+        "params": { "model": "gpt-5.4-mini" },
+        "position": { "x": 331.99205571559094, "y": 335.85600795937023 }
+      },
+      {
+        "id": "node-3",
+        "type": "WorksExtract",
+        "params": { "model": "gpt-5.4-mini" },
+        "position": { "x": 335.420059695276, "y": 550.0 }
+      },
+      {
+        "id": "node-4",
+        "type": "Output",
+        "params": { "exclude": null, "include": null },
+        "position": { "x": 663.4240318374804, "y": 350.0158885688183 }
+      }
+    ],
+    "edges": [
+      { "source": "node-0", "target": "node-1", "sourceHandle": "text", "targetHandle": "text" },
+      { "source": "node-0", "target": "node-2", "sourceHandle": "text", "targetHandle": "text" },
+      { "source": "node-0", "target": "node-3", "sourceHandle": "text", "targetHandle": "text" },
+      { "source": "node-1", "target": "node-4", "sourceHandle": "people", "targetHandle": "data" },
+      { "source": "node-2", "target": "node-4", "sourceHandle": "organizations", "targetHandle": "data" },
+      { "source": "node-3", "target": "node-4", "sourceHandle": "works", "targetHandle": "data" }
+    ]
+  }
+}

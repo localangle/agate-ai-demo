@@ -1,0 +1,42 @@
+{
+  "type": "GeocodeAgent",
+  "name": "GeocodeAgent",
+  "label": "Geocode Agent",
+  "description": "Intelligent geocoding using LLM reasoning",
+  "category": "enrichment",
+  "icon": "MapPin",
+  "color": "bg-purple-500",
+  "inputs": [
+    {
+      "id": "locations",
+      "label": "Locations",
+      "type": "array",
+      "required": true
+    }
+  ],
+  "outputs": [
+    {
+      "id": "locations",
+      "label": "Geocoded Locations",
+      "type": "array"
+    }
+  ],
+  "defaultParams": {
+    "model": "gpt-5.4-mini"
+  },
+  "parameters": {
+    "model": {
+      "type": "select",
+      "label": "Model",
+      "default": "gpt-5.4-mini",
+      "options": [
+        "gpt-5.4-mini",
+        "gpt-5.4",
+        "gpt-5.4-nano"
+      ]
+    }
+  },
+  "requiredUpstreamNodes": ["PlaceExtract", "PlaceFilter"],
+  "dependencyHelperText": "Requires extracted places as input."
+}
+

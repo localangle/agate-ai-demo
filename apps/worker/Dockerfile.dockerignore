@@ -1,0 +1,44 @@
+# Worker-specific Docker ignore - includes geocoding database
+
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+
+# Node.js / UI
+apps/agate-ui/node_modules/
+apps/agate-ui/dist/
+node_modules/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Documentation
+*.md
+LICENSE
+todo.txt
+
+# Infrastructure
+infra/
+copilot/
+scripts/
+terraform/
+
+# Environment files
+.env
+.env.*
+
+# Exclude geocoding database - will be downloaded at runtime
+packages/utils/src/agate_utils/geocoding/data/*.db
+packages/utils/src/agate_utils/geocoding/data/*.db.bz2
+

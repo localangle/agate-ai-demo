@@ -1,0 +1,57 @@
+{
+  "name": "Story metadata example",
+  "spec": {
+    "name": "story_metadata_example",
+    "nodes": [
+      {
+        "id": "node-5",
+        "type": "JSONInput",
+        "params": {
+          "publication": "Chicago Sun-Times",
+          "headline": "What to know about Chicago's delivery robots and the debate over them",
+          "author": "Elleiana Green",
+          "text": "When Lincoln Park resident Ainsley Harris first spotted a delivery robot in her neighborhood last year...",
+          "images": [
+            {
+              "id": "image:ba9616d772403e66b849",
+              "url": "https://cst.brightspotcdn.com/dims4/default/d950736/2147483647/strip/true/crop/6122x4083+0+0/resize/840x560!/quality/90/?url=https%3A%2F%2Fchorus-production-cst-web.s3.us-east-1.amazonaws.com%2Fbrightspot%2F75%2Fd9%2Fcaef9f634923ace2577668389724%2Fcityrobots-12xx24-01.JPG",
+              "caption": "A Coco delivery robot makes its way to a customer."
+            }
+          ]
+        },
+        "position": { "x": -215.0, "y": 358.0 }
+      },
+      {
+        "id": "node-6",
+        "type": "StatsNode",
+        "params": {
+          "enabled_stats": ["word_count", "character_count", "sentence_count", "reading_time_minutes"]
+        },
+        "position": { "x": 55.0, "y": 331.0 }
+      },
+      {
+        "id": "node-8",
+        "type": "LLMEnrich",
+        "params": {
+          "model": "gpt-5.4-mini",
+          "prompt": "Identify the primary purpose of this story from inform, explain, divert, or other. Also provide brief reasoning. The text is as follows: {text}",
+          "json_format": "{\"purpose\":\"inform\",\"reason\":\"\"}",
+          "output_name": "meta_purpose"
+        },
+        "position": { "x": 52.4958274872028, "y": 146.56669616186804 }
+      },
+      {
+        "id": "node-7",
+        "type": "Output",
+        "params": { "exclude": null, "include": null },
+        "position": { "x": 357.0, "y": 383.0 }
+      }
+    ],
+    "edges": [
+      { "source": "node-5", "target": "node-6", "sourceHandle": "text", "targetHandle": "text" },
+      { "source": "node-6", "target": "node-7", "sourceHandle": "meta_stats", "targetHandle": "data" },
+      { "source": "node-5", "target": "node-8", "sourceHandle": "text", "targetHandle": "text" },
+      { "source": "node-8", "target": "node-7", "sourceHandle": "enriched_data", "targetHandle": "data" }
+    ]
+  }
+}

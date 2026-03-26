@@ -1,0 +1,37 @@
+{
+  "type": "OrganizationsExtract",
+  "name": "OrganizationsExtract",
+  "label": "Organizations Extract",
+  "description": "Extract organizations (institutions, agencies, companies) from text using LLM.",
+  "category": "organization",
+  "icon": "Building2",
+  "color": "bg-amber-500",
+  "requiredUpstreamNodes": [],
+  "dependencyHelperText": "Requires text input or JSON with a \"text\" attribute.",
+  "inputs": [
+    {
+      "id": "text",
+      "label": "Text",
+      "type": "string",
+      "required": true
+    }
+  ],
+  "outputs": [
+    {
+      "id": "organizations",
+      "label": "Organizations",
+      "type": "array"
+    }
+  ],
+  "defaultParams": {
+    "model": "gpt-5.4-mini",
+    "prompt_file": "prompts/extract.md",
+    "prompt": "",
+    "json_format": "{\n  \"organizations\": [\n    {\n      \"name\": \"Chicago Public Schools\",\n      \"type\": \"school_district\",\n      \"role_in_story\": \"Announced new policy\",\n      \"mentions\": [\n        {\n          \"text\": \"Chicago Public Schools announced a new policy on Monday.\"\n        }\n      ]\n    },\n    {\n      \"name\": \"Chicago City Council\",\n      \"type\": \"legislative_body\",\n      \"role_in_story\": \"Voted on ordinance\",\n      \"mentions\": [\n        {\n          \"text\": \"The city council approved the measure.\"\n        }\n      ]\n    },\n    {\n      \"name\": \"Chicago Bulls\",\n      \"type\": \"sports_team\",\n      \"role_in_story\": \"Won the game\",\n      \"mentions\": [\n        {\n          \"text\": \"Chicago rallied in the fourth quarter.\"\n        }\n      ]\n    }\n  ]\n}"
+  },
+  "availableModels": [
+    {"value": "gpt-5.4-mini", "label": "GPT-5.4 Mini"},
+    {"value": "gpt-5.4", "label": "GPT-5.4"},
+    {"value": "gpt-5.4-nano", "label": "GPT-5.4 Nano"}
+  ]
+}

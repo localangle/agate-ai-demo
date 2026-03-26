@@ -1,0 +1,36 @@
+{
+  "type": "LLMEnrich",
+  "label": "LLM Enrich",
+  "icon": "Brain",
+  "description": "Custom LLM enrichment with JSON output",
+  "category": "enrichment",
+  "color": "bg-green-500",
+  "requiredUpstreamNodes": [],
+  "dependencyHelperText": "Requires text or JSON input.",
+  "inputs": [
+    {
+      "id": "text",
+      "label": "Text",
+      "type": "string",
+      "required": true
+    }
+  ],
+  "outputs": [
+    {
+      "id": "enriched_data",
+      "label": "Enriched Data",
+      "type": "object"
+    }
+  ],
+  "defaultParams": {
+    "model": "gpt-5.4-mini",
+    "prompt": "",
+    "json_format": "{}",
+    "output_name": "meta_enriched_data"
+  },
+  "availableModels": [
+    { "value": "gpt-5.4-mini", "label": "GPT-5.4 Mini" },
+    { "value": "gpt-5.4", "label": "GPT-5.4" },
+    { "value": "gpt-5.4-nano", "label": "GPT-5.4 Nano" }
+  ]
+}

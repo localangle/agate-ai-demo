@@ -1,0 +1,46 @@
+{
+  "name": "Place extraction",
+  "spec": {
+    "name": "place_extraction",
+    "nodes": [
+      {
+        "id": "node-0",
+        "type": "TextInput",
+        "params": {
+          "text": "Police are looking for two assailants inside a white Mercedes who fatally shot a man in another car during an argument Wednesday morning in the Woodlawn neighborhood.\n\nThe 29-year-old victim was inside his vehicle in the 6200 block of South Drexel Avenue around 11:30 a.m. Wednesday two people inside a white Mercedes pulled up and began arguing with him, police said.\n\nOne of the occupants in the Mercedes shot the man in the chest and he was taken to the University of Chicago Medical Center where he was pronounced dead, police said."
+        },
+        "position": { "x": -142.0, "y": 285.0 }
+      },
+      {
+        "id": "node-1",
+        "type": "PlaceExtract",
+        "params": { "model": "gpt-5.4-mini" },
+        "position": { "x": 193.0, "y": 308.0 }
+      },
+      {
+        "id": "node-2",
+        "type": "PlaceFilter",
+        "params": { "model": "gpt-5.4-mini" },
+        "position": { "x": 443.0, "y": 303.0 }
+      },
+      {
+        "id": "node-3",
+        "type": "GeocodeAgent",
+        "params": { "calculateParents": true },
+        "position": { "x": 688.0, "y": 300.0 }
+      },
+      {
+        "id": "node-4",
+        "type": "Output",
+        "params": {},
+        "position": { "x": 945.0, "y": 332.0 }
+      }
+    ],
+    "edges": [
+      { "source": "node-0", "target": "node-1", "sourceHandle": "text", "targetHandle": "text" },
+      { "source": "node-1", "target": "node-2", "sourceHandle": "locations", "targetHandle": "locations" },
+      { "source": "node-2", "target": "node-3", "sourceHandle": "locations", "targetHandle": "locations" },
+      { "source": "node-3", "target": "node-4", "sourceHandle": "locations", "targetHandle": "data" }
+    ]
+  }
+}

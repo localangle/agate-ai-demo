@@ -1,0 +1,45 @@
+{
+  "name": "Image embeddings",
+  "spec": {
+    "name": "image_embeddings",
+    "nodes": [
+      {
+        "id": "node-5",
+        "type": "JSONInput",
+        "params": {
+          "headline": "South Chicago mural unites communities",
+          "text": "A mural in South Chicago celebrates Black and Brown communities working together to revitalize their neighborhood.",
+          "images": [
+            {
+              "id": "image:b243dd6c71debadf1520",
+              "url": "https://cst.brightspotcdn.com/dims4/default/3a88f55/2147483647/strip/true/crop/4032x2267+0+211/resize/820x461!/quality/90/?url=https%3A%2F%2Fchorus-production-cst-web.s3.us-east-1.amazonaws.com%2Fbrightspot%2Fb0%2F42%2Fd37a38354276b1c4434d9d5cc07c%2Fimg-7275-1.jpeg",
+              "caption": "This mural, The Future Is in Our Hands, is at the South Chicago Learning Center.",
+              "is_mural": "true"
+            }
+          ]
+        },
+        "position": { "x": -140.0, "y": 227.0 }
+      },
+      {
+        "id": "node-7",
+        "type": "EmbedImages",
+        "params": {
+          "prompt": "Describe this image in detail. Use the provided context (caption and article text) to inform your description. Prioritize the information in the caption but also include what you observe in the image itself.",
+          "llm_model": "gpt-5.4-mini",
+          "output_name": "image_embeddings"
+        },
+        "position": { "x": 157.84181602698703, "y": 249.57791830452328 }
+      },
+      {
+        "id": "node-8",
+        "type": "Output",
+        "params": { "exclude": null, "include": null },
+        "position": { "x": 423.93421889496574, "y": 249.0892730493568 }
+      }
+    ],
+    "edges": [
+      { "source": "node-7", "target": "node-8", "sourceHandle": "results", "targetHandle": "data" },
+      { "source": "node-5", "target": "node-7", "sourceHandle": "text", "targetHandle": "images" }
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "type": "EmbedImages",
+  "name": "EmbedImages",
+  "label": "Embed Images",
+  "description": "Generate descriptions and embeddings for images using OpenAI",
+  "category": "enrichment",
+  "icon": "Image",
+  "color": "bg-orange-500",
+  "requiredUpstreamNodes": [],
+  "dependencyHelperText": "Requires JSON input with an \"images\" attribute.",
+  "inputs": [
+    {
+      "id": "images",
+      "label": "Images",
+      "type": "object",
+      "required": true
+    }
+  ],
+  "outputs": [
+    {
+      "id": "results",
+      "label": "Results",
+      "type": "array"
+    }
+  ],
+  "defaultParams": {
+    "prompt": "Describe this image in detail. Use the provided context (caption and article text) to inform your description, but focus primarily on what you see in the image itself.",
+    "llm_model": "gpt-5.4-mini",
+    "output_name": "image_embeddings"
+  },
+  "availableModels": [
+    { "value": "gpt-5.4-mini", "label": "GPT-5.4 Mini" },
+    { "value": "gpt-5.4", "label": "GPT-5.4" },
+    { "value": "gpt-5.4-nano", "label": "GPT-5.4 Nano" }
+  ]
+}

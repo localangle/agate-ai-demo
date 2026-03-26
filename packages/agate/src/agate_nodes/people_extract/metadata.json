@@ -1,0 +1,38 @@
+{
+  "type": "PeopleExtract",
+  "name": "PeopleExtract",
+  "label": "People Extract",
+  "description": "Extract people information from text using LLM.",
+  "category": "extraction",
+  "icon": "User",
+  "color": "bg-indigo-500",
+  "requiredUpstreamNodes": [],
+  "dependencyHelperText": "Requires text input or JSON with a \"text\" attribute.",
+  "inputs": [
+    {
+      "id": "text",
+      "label": "Text",
+      "type": "string",
+      "required": true
+    }
+  ],
+  "outputs": [
+    {
+      "id": "people",
+      "label": "People",
+      "type": "array"
+    }
+  ],
+  "defaultParams": {
+    "model": "gpt-5.4-mini",
+    "prompt_file": "prompts/extract.md",
+    "prompt": "",
+    "json_format": "{\n  \"people\": [\n    {\n      \"name\": {\n        \"full\": \"John Smith\",\n        \"first\": \"John\",\n        \"last\": \"Smith\"\n      },\n      \"title\": \"Mayor\",\n      \"affiliation\": \"City of Chicago\",\n      \"public_figure\": true,\n      \"role_in_story\": \"Announced new policy initiative\",\n      \"mentions\": [\n        {\n          \"text\": \"Mayor John Smith announced a new policy initiative on Monday.\",\n          \"quote\": false\n        },\n        {\n          \"text\": \"\\\"This will benefit all residents,\\\" Smith said.\",\n          \"quote\": true\n        }\n      ]\n    },\n    {\n      \"name\": {\n        \"full\": \"Jane Doe\",\n        \"first\": \"Jane\",\n        \"last\": \"Doe\"\n      },\n      \"title\": \"\",\n      \"affiliation\": \"\",\n      \"public_figure\": false,\n      \"role_in_story\": \"Resident affected by the policy\",\n      \"mentions\": [\n        {\n          \"text\": \"Jane Doe, a local resident, expressed concerns about the new policy.\",\n          \"quote\": false\n        }\n      ]\n    }\n  ]\n}"
+  },
+  "availableModels": [
+    { "value": "gpt-5.4-mini", "label": "GPT-5.4 Mini" },
+    { "value": "gpt-5.4", "label": "GPT-5.4" },
+    { "value": "gpt-5.4-nano", "label": "GPT-5.4 Nano" }
+  ]
+}
+

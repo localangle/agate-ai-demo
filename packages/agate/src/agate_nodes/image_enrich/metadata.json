@@ -1,0 +1,37 @@
+{
+  "type": "ImageEnrich",
+  "label": "Image Enrich",
+  "icon": "Sparkles",
+  "description": "Generate structured metadata for images using LLM vision models",
+  "category": "enrichment",
+  "color": "bg-purple-500",
+  "requiredUpstreamNodes": [],
+  "dependencyHelperText": "Requires JSON input with image objects (\"image\" or \"images\" field, or objects with \"url\" or \"base64\" fields).",
+  "inputs": [
+    {
+      "id": "images",
+      "label": "Images",
+      "type": "object",
+      "required": true
+    }
+  ],
+  "outputs": [
+    {
+      "id": "metadata",
+      "label": "Metadata",
+      "type": "array"
+    }
+  ],
+  "defaultParams": {
+    "prompt": "Analyze this image and extract structured metadata. Focus on visual elements, composition, subjects, and any relevant details.",
+    "llm_model": "gpt-5.4-mini",
+    "json_format": "{}",
+    "output_name": "image_metadata"
+  },
+  "availableModels": [
+    { "value": "gpt-5.4-mini", "label": "GPT-5.4 Mini" },
+    { "value": "gpt-5.4", "label": "GPT-5.4" },
+    { "value": "gpt-5.4-nano", "label": "GPT-5.4 Nano" }
+  ]
+}
+

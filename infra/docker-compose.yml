@@ -1,0 +1,108 @@
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: postgres/Dockerfile
+    environment:
+      POSTGRES_DB: demo
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_data_demo:/var/lib/postgresql/data
+      - ./bootstrap:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  agate-api:
+    build:
+      context: ../
+      dockerfile: apps/agate-api/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@postgres:5432/demo
+      REDIS_URL: redis://redis:6379/0
+      MASTER_ENCRYPTION_KEY: ${MASTER_ENCRYPTION_KEY:-N9sGOWzcfVDT8BhB8aNkfg-bo9BC_u-1vgK8uZmDZTg=}
+      UI_ORIGIN: http://localhost:5173
+      CELERY_NUM_QUEUES: ${CELERY_NUM_QUEUES:-4}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ../apps/agate-api:/app/apps/agate-api
+      - ../packages:/app/packages
+    command: uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
+
+  worker:
+    build:
+      context: ../
+      dockerfile: apps/worker/Dockerfile
+    environment:
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@postgres:5432/demo
+      REDIS_URL: redis://redis:6379/0
+      MASTER_ENCRYPTION_KEY: ${MASTER_ENCRYPTION_KEY:-N9sGOWzcfVDT8BhB8aNkfg-bo9BC_u-1vgK8uZmDZTg=}
+      AGATE_TIMEZONE: ${AGATE_TIMEZONE:-America/Chicago}
+      PYTHONPATH: /app/apps/worker/src:/app/packages/agate/src:/app/packages/utils/src
+      WORKER_CONCURRENCY: ${WORKER_CONCURRENCY:-4}
+      CELERY_NUM_QUEUES: ${CELERY_NUM_QUEUES:-4}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ../apps/worker:/app/apps/worker
+      - ../packages:/app/packages
+    command:
+      - python
+      - -m
+      - celery
+      - -A
+      - worker.tasks
+      - worker
+      - --loglevel=info
+      - --concurrency=4
+      - -Ofair
+      - -Q
+      - queue-0,queue-1,queue-2,queue-3
+
+  agate-ui:
+    build:
+      context: ../apps/agate-ui
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_BASE: http://localhost:8000
+      VITE_TIMEZONE: ${TIMEZONE:-America/Chicago}
+    volumes:
+      - ../apps/agate-ui:/app
+      - ../packages:/app/packages
+      # Persist deps separately from the bind mount; stale volumes can miss new packages (e.g. leaflet).
+      # After changing package.json: `docker compose run --rm agate-ui npm install`
+      # or remove this volume: `docker volume rm infra_agate_ui_node_modules`
+      - agate_ui_node_modules:/app/node_modules
+    command: ["sh", "-c", "echo '[agate-ui] Container started. Installing dependencies and syncing nodes before dev server starts...' && npm install && node scripts/sync-nodes.js && npm run dev -- --host 0.0.0.0"]
+
+volumes:
+  postgres_data_demo:
+    name: infra_postgres_data_demo
+  agate_ui_node_modules:
+    name: infra_agate_ui_node_modules
