@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import type { Run } from '@/lib/api'
+import { runStatusDotClasses } from '@/lib/statusBadgeStyles'
 import { Suspense } from 'react'
 import { panelComponents } from '@/nodes/registry'
 
@@ -58,19 +59,6 @@ export default function NodePanel({
       if (confirm(`Delete ${selectedNode.type} node?`)) {
         onDelete?.(selectedNode.id)
       }
-    }
-  }
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'succeeded':
-        return 'bg-green-500'
-      case 'failed':
-        return 'bg-red-500'
-      case 'running':
-        return 'bg-blue-500'
-      default:
-        return 'bg-gray-500'
     }
   }
 
@@ -335,7 +323,7 @@ export default function NodePanel({
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center gap-2">
-                <div className={`h-2 w-2 rounded-full ${getStatusColor(currentRun.status)}`} />
+                <div className={`h-2 w-2 rounded-full ${runStatusDotClasses(currentRun.status)}`} />
                 <span className="text-sm font-medium capitalize">{currentRun.status}</span>
               </div>
 

@@ -22,6 +22,8 @@ This starts: `postgres`, `redis`, `agate-api`, `worker`, `agate-ui`.
 
 `agate-ui` takes a little while to start up, so wait for it to finish building before you attempt to log in.
 
+Note that the first time you run this, it will download a rather large database from the [Who's on First gazetteer](https://whosonfirst.org/). This is a workaround in lieu infrastructure that exists in the complete platform. It supports the assignment of parent geographies in the geocoding nodes.
+
 Stop:
 
 ```bash

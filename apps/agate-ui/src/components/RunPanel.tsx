@@ -4,6 +4,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Link } from 'react-router-dom'
 import type { Run } from '@/lib/api'
+import { cn } from '@/lib/utils'
+import { runStatusBadgeClasses } from '@/lib/statusBadgeStyles'
 
 interface RunPanelProps {
   onClose: () => void
@@ -16,21 +18,6 @@ export default function RunPanel({
   running,
   currentRun,
 }: RunPanelProps) {
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'running':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200'
-      case 'completed':
-        return 'bg-green-100 text-green-800 border-green-200'
-      case 'completed_with_errors':
-        return 'bg-orange-100 text-orange-800 border-orange-200'
-      case 'pending':
-        return 'bg-gray-100 text-gray-800 border-gray-200'
-      default:
-        return 'bg-gray-100 text-gray-800 border-gray-200'
-    }
-  }
-
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'running':
@@ -85,7 +72,7 @@ export default function RunPanel({
                       View Details
                     </Button>
                   </Link>
-                  <Badge className={getStatusColor(currentRun.status)}>
+                  <Badge className={cn(runStatusBadgeClasses(currentRun.status))}>
                     <div className="flex items-center gap-1">
                       {getStatusIcon(currentRun.status)}
                       {formatStatusLabel(currentRun.status)}

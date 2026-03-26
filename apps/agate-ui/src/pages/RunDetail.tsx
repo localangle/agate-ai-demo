@@ -5,7 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { getRun, getGraph, createRun, cancelRun, rerunProcessedItem, type Run, type Graph, type ProcessedItemSummary } from '@/lib/api'
-import { formatDateCentral } from '@/lib/utils'
+import { cn, formatDateCentral } from '@/lib/utils'
+import { processedItemStatusBadgeClasses } from '@/lib/statusBadgeStyles'
 import { ArrowLeft, Download, CheckCircle, XCircle, Clock, Loader2, AlertTriangle, FileText, Play, StopCircle, ExternalLink, RotateCcw } from 'lucide-react'
 import { Checkbox } from '@/components/ui/checkbox'
 
@@ -175,21 +176,6 @@ export default function RunDetail() {
       alert('Failed to rerun some items. Please check the console for details.')
     } finally {
       setRerunningItems(new Set())
-    }
-  }
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'running':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200'
-      case 'succeeded':
-        return 'bg-green-100 text-green-800 border-green-200'
-      case 'failed':
-        return 'bg-red-100 text-red-800 border-red-200'
-      case 'timed_out':
-        return 'bg-orange-100 text-orange-800 border-orange-200'
-      default:
-        return 'bg-gray-100 text-gray-800 border-gray-200'
     }
   }
 
@@ -488,7 +474,7 @@ export default function RunDetail() {
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-col gap-1">
-                        <Badge className={`${getStatusColor(item.status)} w-fit`}>
+                        <Badge className={cn(processedItemStatusBadgeClasses(item.status), 'w-fit')}>
                           {getStatusIcon(item.status)}
                           <span className="ml-1 capitalize">{item.status}</span>
                         </Badge>

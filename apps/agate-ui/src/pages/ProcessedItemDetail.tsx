@@ -7,7 +7,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { getRun, getGraph, getProcessedItem, rerunProcessedItem, type Run, type Graph, type ProcessedItem } from '@/lib/api'
 import { getVisualizationsForItem, type VisualizationDescriptor } from '@/lib/visualizations'
-import { formatDateCentral } from '@/lib/utils'
+import { cn, formatDateCentral } from '@/lib/utils'
+import { processedItemStatusBadgeClasses } from '@/lib/statusBadgeStyles'
 import { ArrowLeft, Download, CheckCircle, XCircle, Clock, Loader2, AlertTriangle, FileText, ExternalLink } from 'lucide-react'
 import JsonView from '@uiw/react-json-view'
 
@@ -78,21 +79,6 @@ export default function ProcessedItemDetail() {
       console.error('Failed to load item data:', error)
     } finally {
       setLoading(false)
-    }
-  }
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'running':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200'
-      case 'succeeded':
-        return 'bg-green-100 text-green-800 border-green-200'
-      case 'failed':
-        return 'bg-red-100 text-red-800 border-red-200'
-      case 'timed_out':
-        return 'bg-orange-100 text-orange-800 border-orange-200'
-      default:
-        return 'bg-gray-100 text-gray-800 border-gray-200'
     }
   }
 
@@ -380,7 +366,7 @@ export default function ProcessedItemDetail() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             Item Information
-            <Badge className={getStatusColor(item.status)}>
+            <Badge className={cn(processedItemStatusBadgeClasses(item.status))}>
               {getStatusIcon(item.status)}
               <span className="ml-1 capitalize">{item.status}</span>
             </Badge>

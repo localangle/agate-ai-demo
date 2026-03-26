@@ -38,8 +38,8 @@
         "type": "LLMEnrich",
         "params": {
           "model": "gpt-5.4-mini",
-          "prompt": "Identify the primary purpose of this story from inform, explain, divert, or other. Also provide brief reasoning. The text is as follows: {text}",
-          "json_format": "{\"purpose\":\"inform\",\"reason\":\"\"}",
+          "prompt": "Identify the primary purpose of this story from inform, explain, divert, or other. Also provide brief reasoning.\n\ninform: Provide basic, straightforward information that describes a news event. Often in the inverted pyramid style. The goal this serves to the reader is to relay information and bring them up to speed.\n\nexplain: Explore the context around a news event, issue or trend with explanation and analysis. The goal this serves for the reader is to enrich their understanding of a topic or issue.\n\ndivert: Entertain the reader with an interesting story, which might be a profile or other feature.\n\nother: Anything else\n\nPlease also provide a brief reason for your decision.\n\nThe text is as follows: {text}",
+          "json_format": "{\"purpose\":\"inform\",\"reason\":\"This story briefly describes the circumstances of an accident\"}",
           "output_name": "meta_purpose"
         },
         "position": { "x": 52.4958274872028, "y": 146.56669616186804 }

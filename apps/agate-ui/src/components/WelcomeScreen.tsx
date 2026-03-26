@@ -4,18 +4,13 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Loader2, Sparkles, Workflow, KeyRound, ArrowRight, ArrowLeft, CheckCircle2 } from 'lucide-react'
-import { listProjects, setProjectApiKey, type Project } from '@/lib/api'
+import { listProjects, listProjectApiKeys, setProjectApiKey, type Project } from '@/lib/api'
 import { DEFAULT_PROJECT_NAME, LEGACY_DEFAULT_PROJECT_NAME } from '@/lib/defaultProject'
 
-const STORAGE_KEY = 'agate_demo_welcome_dismissed'
-
-function readInitiallyOpen(): boolean {
-  if (typeof window === 'undefined') return false
-  return sessionStorage.getItem(STORAGE_KEY) !== '1'
-}
-
 export default function WelcomeScreen() {
-  const [open, setOpen] = useState(readInitiallyOpen)
+  const [open, setOpen] = useState(false)
+  /** True until we know whether to show welcome (avoids flash before API check). */
+  const [checkingWelcome, setCheckingWelcome] = useState(true)
   const [step, setStep] = useState(0)
   const [projects, setProjects] = useState<Project[]>([])
   const [projectsLoading, setProjectsLoading] = useState(false)
@@ -26,7 +21,6 @@ export default function WelcomeScreen() {
   const [error, setError] = useState<string | null>(null)
 
   const dismiss = useCallback(() => {
-    sessionStorage.setItem(STORAGE_KEY, '1')
     setOpen(false)
   }, [])
 
@@ -35,11 +29,12 @@ export default function WelcomeScreen() {
   const canGoBack = step > 0
 
   useEffect(() => {
-    if (!open) return
-    const loadProjects = async () => {
+    let cancelled = false
+    const run = async () => {
       try {
         setProjectsLoading(true)
         const allProjects = await listProjects()
+        if (cancelled) return
         setProjects(allProjects)
         const defaultProject =
           allProjects.find((p) => p.name === DEFAULT_PROJECT_NAME) ??
@@ -47,15 +42,30 @@ export default function WelcomeScreen() {
           allProjects[0]
         if (defaultProject) {
           setSelectedProjectId(defaultProject.id.toString())
+          const keys = await listProjectApiKeys(defaultProject.id)
+          if (cancelled) return
+          const hasOpenAiKey = keys.some((k) => k.key_name === 'OPENAI_API_KEY')
+          setOpen(!hasOpenAiKey)
+        } else {
+          setOpen(true)
         }
-      } catch (e) {
-        setError('Could not load projects. You can still continue and set your key later in Project Settings.')
+      } catch {
+        if (!cancelled) {
+          setError('Could not load projects. You can still continue and set your key later in Project Settings.')
+          setOpen(true)
+        }
       } finally {
-        setProjectsLoading(false)
+        if (!cancelled) {
+          setProjectsLoading(false)
+          setCheckingWelcome(false)
+        }
       }
     }
-    loadProjects()
-  }, [open])
+    run()
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   const saveApiKey = useCallback(async () => {
     if (!selectedProjectId) {
@@ -107,7 +117,7 @@ export default function WelcomeScreen() {
     }
   }, [open])
 
-  if (!open) return null
+  if (checkingWelcome || !open) return null
 
   return (
     <div

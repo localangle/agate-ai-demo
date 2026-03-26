@@ -5,7 +5,8 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { listRuns, listGraphs, listProjects, cancelRun, type Run, type Graph, type Project } from '@/lib/api'
-import { formatDateCentral } from '@/lib/utils'
+import { cn, formatDateCentral } from '@/lib/utils'
+import { runStatusBadgeClasses } from '@/lib/statusBadgeStyles'
 import { Loader2, CheckCircle, XCircle, Clock, ArrowRight, RefreshCw, Building2, AlertTriangle, StopCircle, ChevronLeft, ChevronRight } from 'lucide-react'
 
 const RUNS_PER_PAGE = 50
@@ -145,21 +146,6 @@ export default function RunsList() {
         next.delete(runId)
         return next
       })
-    }
-  }
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'running':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200'
-      case 'completed':
-        return 'bg-green-100 text-green-800 border-green-200'
-      case 'completed_with_errors':
-        return 'bg-orange-100 text-orange-800 border-orange-200'
-      case 'pending':
-        return 'bg-gray-100 text-gray-800 border-gray-200'
-      default:
-        return 'bg-gray-100 text-gray-800 border-gray-200'
     }
   }
 
@@ -358,7 +344,7 @@ export default function RunsList() {
                       </div>
                     </td>
                     <td className="p-4">
-                      <Badge className={getStatusColor(run.status)}>
+                      <Badge className={cn(runStatusBadgeClasses(run.status))}>
                         {getStatusIcon(run.status)}
                         <span className="ml-1 capitalize">{run.status.replace(/_/g, ' ')}</span>
                       </Badge>
