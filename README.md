@@ -4,7 +4,7 @@ Agate uses large language models, along with other tools, to turn news articles 
 
 This local-only demo packages a stripped-down extraction worfklow (**Agate UI**), API (**Agate API**), worker (**Celery**), PostgreSQL, and Redis so you can explore composable structured-journalism workflows end-to-end.
 
-[Initial work](https://github.com/minneapolisstartribune/agate-ai) began under the Lenfest AI Collaborative and Fellowship Program at the Minnesota Star Tribune, with additional support from Chicago Public Media and the Reynolds Journalism Institute. Agate is built and maintained by [Local Angle](https://localangle.co), and released under the MIT License. 
+[Initial work](https://github.com/minneapolisstartribune/agate-ai) began under the Lenfest AI Collaborative and Fellowship Program at the Minnesota Star Tribune and has since continued in collaboration with organizations including Chicago Public Media and the Reynolds Journalism Institute. Agate is built and maintained by [Local Angle](https://localangle.co), and released under the MIT License. 
 
 ## Prerequisites
 
