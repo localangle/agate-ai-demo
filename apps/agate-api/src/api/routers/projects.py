@@ -7,7 +7,6 @@ from pydantic import BaseModel
 
 from agate_db import (
     DEFAULT_PROJECT_NAME,
-    LEGACY_DEFAULT_PROJECT_NAME,
     Project,
     Graph,
     Run,
@@ -159,7 +158,7 @@ def delete_project(
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
 
-    if project.name in (DEFAULT_PROJECT_NAME, LEGACY_DEFAULT_PROJECT_NAME):
+    if project.name == DEFAULT_PROJECT_NAME:
         raise HTTPException(
             status_code=400,
             detail=f"Cannot delete the default '{DEFAULT_PROJECT_NAME}' project",
