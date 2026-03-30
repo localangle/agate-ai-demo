@@ -21,7 +21,8 @@ COPY apps/worker /app/apps/worker
 
 RUN cd /app/packages/utils && uv pip install --system -e .
 RUN cd /app/packages/agate && uv pip install --system -e .
-RUN cd /app/apps/worker && uv pip install --system -e .
+RUN cd /app/apps/worker && uv pip install --system -e . \
+    && python -c "from ddgs import DDGS"
 
 ENV PYTHONPATH=/app/apps/worker/src
 

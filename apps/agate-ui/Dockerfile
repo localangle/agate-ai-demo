@@ -15,6 +15,6 @@ COPY . .
 # Expose port
 EXPOSE 5173
 
-# Start dev server (docker-compose overrides this with npm install + sync-nodes + dev)
+# Start dev server (docker-compose overrides this with conditional npm ci + sync-nodes + dev)
 CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
 

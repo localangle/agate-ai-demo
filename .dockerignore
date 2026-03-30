@@ -31,6 +31,9 @@ ENV/
 env/
 
 # Node.js / UI
+apps/agate-ui/node_modules/
+apps/agate-ui/dist/
+apps/agate-ui/.vite/
 apps/ui/node_modules/
 apps/ui/dist/
 apps/ui/.vite/
@@ -64,9 +67,18 @@ terraform/
 .terraform/
 
 # Large data files (geocoding databases)
+# Use **/*.db — plain *.db only matches .db files at the repo root, not nested paths.
 packages/utils/src/agate_utils/geocoding/data/
-*.db
-*.db.bz2
+**/geocoding/data/**
+**/*.db
+**/*.db.bz2
+**/*.sqlite
+**/*.sqlite3
+
+# Local / IDE bloat (not needed in images)
+.cursor/
+test-data/
+scratch/
 
 # Environment files
 .env
